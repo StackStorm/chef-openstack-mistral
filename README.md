@@ -81,5 +81,6 @@ Include `openstack-mistral` in your node's `run_list`:
 ## License and Authors
 
 License:: Apache 2.0 
-Author:: StackStorm (<info@stackstorm.com>)
-Author:: Denis Baryshev (<dennybaa@gmail.com>)
+
+- Author:: StackStorm (<info@stackstorm.com>)
+- Author:: Denis Baryshev (<dennybaa@gmail.com>)
