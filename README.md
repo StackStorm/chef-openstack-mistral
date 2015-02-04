@@ -12,50 +12,15 @@ Cookbook depends on other cookbooks: ***build-essential, python, git, runit***.
 
 ## Attributes
 
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['openstack-mistral']['install_method']</tt></td>
-    <td>String</td>
-    <td>Mistral installation method. (by default installs from git)</td>
-    <td><tt>:source</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['openstack-mistral']['source']['git_url']</tt></td>
-    <td>String</td>
-    <td>Git source url</td>
-    <td><tt>https://github.com/stackforge/mistral</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['openstack-mistral']['source']['git_revision']</tt></td>
-    <td>String</td>
-    <td>Git branch or revision. If none is given the latest is used.</td>
-    <td><tt></tt></td>
-  </tr>
-  <tr>
-    <td><tt>['openstack-mistral']['source']['git_action']</tt></td>
-    <td>String</td>
-    <td>Action of git provider. If none is given the source will be checked out.</td>
-    <td><tt></tt></td>
-  </tr>
-  <tr>
-    <td><tt>['openstack-mistral']['prefix_dir']</tt></td>
-    <td>String</td>
-    <td>Specifies the base directory under which mistral code is be checkout. If it's not given /opt/openstack is used.</td>
-    <td><tt></tt></td>
-  </tr>
-  <tr>
-    <td><tt>['openstack-mistral']['etc_dir']</tt></td>
-    <td>String</td>
-    <td>Specifies the configuration directory where mistral service configrution files are places. If it's not given /opt/openstack/etc is used.</td>
-    <td><tt></tt></td>
-  </tr>
-</table>
+| Key | Type | Description | Default |
+| --- | :---: | :--- | :---: |
+| `['openstack-mistral']['install_method']` | String | Mistral installation method (by default installs from git). | `:source` |
+| `[‘openstack-mistral’][‘source’][‘git_url’] ` | String | Git source url. (https://github.com/stackforge/mistral)  |
+| `['openstack-mistral']['source']['git_revision']` | String | Git branch or revision. If none is given the latest is used. | `nil` |
+| `['openstack-mistral']['source']['git_action']` | String | Action for git provider. If none is given the source will be checked out. | `nil` |
+| `['openstack-mistral']['prefix_dir']` | String | Specifies the base directory under which mistral code is be checkout. If it's not given /opt/openstack is used. | `nil` |
+| `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral service configrution files are places. If it's not given /opt/openstack/etc is used. | `nil` |
+| `['openstack-mistral']['logfiles_mode']` | String | Sets log file permission when `touch_logfiles` resource attribute is used. | `'0644'` |
 
 ## Usage
 
@@ -117,4 +82,4 @@ Include `openstack-mistral` in your node's `run_list`:
 
 License:: Apache 2.0 
 Author:: StackStorm (<info@stackstorm.com>)
-Author::  Denis Baryshev (<dennybaa@gmail.com>)
+Author:: Denis Baryshev (<dennybaa@gmail.com>)
