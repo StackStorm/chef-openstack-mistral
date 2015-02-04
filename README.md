@@ -47,11 +47,11 @@ mistral_service 'st2' do
   action [ :create, :start ]
   options({
     DEFAULT: {
-      qpid_hostname=broker.example.net
+      qpid_hostname: 'broker.example.net'
     },
     api: {
-      host=mistral-api.host
-      port=8989
+      host: 'mistral-api.host',
+      port: '8989'
     }
   })
   touch_logfiles [
