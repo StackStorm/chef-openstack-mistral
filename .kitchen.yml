@@ -1,0 +1,20 @@
+---
+driver:
+  name: docker
+  # customize:
+  #   memory: 3072
+  #   cpus: 3
+  use_sudo: false
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-14.04
+  - name: centos-6.4
+
+suites:
+  - name: default
+    run_list:
+      - "recipe[openstack-mistral::default]"
+    attributes:
