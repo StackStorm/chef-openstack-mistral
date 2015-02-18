@@ -1,0 +1,21 @@
+# Mistral Workflow Service upstart init file.
+
+description     "Mistral Workflow Service instance <%= @service_name %>"
+author          "chef-client"
+
+start on filesystem and net-device-up IFACE!=lo
+stop on starting rc RUNLEVEL=[016]
+
+setuid <%= @run_user %>
+setgid <%= @run_group %>
+respawn
+respawn limit 2 5
+
+umask 007
+kill timeout 60
+
+script
+  cd <%= @home %>
+  . .venv/bin/activate
+  python <%= @service_bin %> --config-file <%= @config_file %> --log-config <%= @log_config %> <%= @start_services %>
+end script

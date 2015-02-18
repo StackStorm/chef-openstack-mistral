@@ -2,23 +2,22 @@ require 'chef/resource/lwrp_base'
 
 class Chef
   class Resource
-    class MistralService < Chef::Resource::LWRPBase
-      self.resource_name = :mistral_service
+    class Mistral < Chef::Resource::LWRPBase
+
+      self.resource_name = :mistral
       actions :create, :delete, :start, :stop, :restart
       default_action :create
 
+      attribute :service_name, kind_of: String, name_attribute: true
       attribute :bind_address, kind_of: String, default: '0.0.0.0'
       attribute :port, kind_of: String, default: 8989
       attribute :run_group, kind_of: String, default: 'mistral'
       attribute :run_user, kind_of: String, default:  'mistral'
-      attribute :conf_source, kind_of: String, default: 'mistral.conf.erb'
-      attribute :log_source, kind_of: String, default: 'logging.conf.erb'
-      attribute :conf_cookbook, kind_of: String, default: nil
-      attribute :log_cookbook, kind_of: String, default: nil
-      attribute :options, kind_of: [Hash], default: nil
-      attribute :log_variables, kind_of: [Hash], default: nil
-      attribute :touch_logfiles, kind_of: [Array], default: []
-      attribute :starts, kind_of: [Symbol, String, Array], callbacks: {
+      attribute :options, kind_of: [ Hash ], default: nil
+      attribute :logfile_source, kind_of: String, default: nil
+      attribute :logfile_options, kind_of: [ Hash ], default: nil
+      attribute :logfile_creates, kind_of: [ Array ], default: [ '/var/log/mistral.log' ]
+      attribute :starts, kind_of: [ Symbol, String, Array ], callbacks: {
         'should be combination of :api, :engine, :executor' => lambda {|value| validate_starts(value)}
       }
 

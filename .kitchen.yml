@@ -1,17 +1,19 @@
 ---
 driver:
-  name: docker
-  # customize:
-  #   memory: 3072
-  #   cpus: 3
-  use_sudo: false
+  name: vagrant
+  customize:
+    memory: 1024
+    cpus: 2
+  # use_sudo: false
 
 provisioner:
   name: chef_solo
 
 platforms:
   - name: ubuntu-14.04
+  - name: centos-7.0
   - name: centos-6.4
+  - name: debian-7.8
 
 suites:
   - name: default

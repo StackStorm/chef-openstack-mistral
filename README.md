@@ -1,82 +1,72 @@
-# openstack-mistral-cookbook
-
+# OpenStack Mistral chef cookbook
 Sets up and configures [**Mistral Workflow Service**](https://github.com/stackforge/mistral) on a chef node.
 
 ## Supported Platforms
 
-There are no restrictions for platforms, it should support deb or rpm based systems. Tested to work on *ubuntu* and *centos*.
+There are no restrictions for platforms, cookbook should support major debian, fedora and rhel platforms. Tested to work on *ubuntu*, *debian* and *centos*.
 
 ## Cookbook dependencies
 
-Cookbook depends on other cookbooks: ***build-essential, python, git, runit***.
+Cookbook depends on other cookbooks: ***build-essential, python, git, mysql***.
 
 ## Attributes
 
 | Key | Type | Description | Default |
 | --- | :---: | :--- | :---: |
-| `['openstack-mistral']['install_method']` | String | Mistral installation method (by default installs from git). | `:source` |
+| `['openstack-mistral']['install_recipe']` | String | Mistral recipe used to fetch mistral. Default option will fetch mistral from git repository. | `'openstack-mistral::install_source'` |
 | `[‘openstack-mistral’][‘source’][‘git_url’] ` | String | Git source url. (https://github.com/stackforge/mistral)  |
 | `['openstack-mistral']['source']['git_revision']` | String | Git branch or revision. If none is given the latest is used. | `nil` |
 | `['openstack-mistral']['source']['git_action']` | String | Action for git provider. If none is given the source will be checked out. | `nil` |
-| `['openstack-mistral']['prefix_dir']` | String | Specifies the base directory under which mistral code is be checkout. If it's not given /opt/openstack is used. | `nil` |
-| `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral service configrution files are places. If it's not given /opt/openstack/etc is used. | `nil` |
-| `['openstack-mistral']['logfiles_mode']` | String | Sets log file permission when `touch_logfiles` resource attribute is used. | `'0644'` |
+| `['openstack-mistral']['source']['home']` | String | Specifies directory where source installation method will place mistral. | `'/opt/openstack/mistral'` |
+| `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral configrution files are placed. | `'/opt/openstack/etc'` |
+| `['openstack-mistral']['logfiles_mode']` | String | Sets log file permission for resource `logfile_creates` option. | `'0644'` |
+| `['openstack-mistral']['db_initialize']['enabled']` | Boolean | If enabled, cookbook will try to create database for mistral. | `false` |
+| `['openstack-mistral']['db_initialize']['superuser']` | String | Database user which can create databases and setup permissions. | `'root'` |
+| `['openstack-mistral']['db_initialize']['password']` | String | Password of superuser. | `'ilikerandompasswords'` |
+| `['openstack-mistral']['db_initialize']['allowed_hosts']` | String | Hosts which will be allowed to access mistral database. | `'localhost'` |
+
 
 ## Usage
 
-Cookbook provides **mistral_service** resource provider which allows you to deploy mistral service, populate its configuration and start it up. Mistral python application is started via **runit** system service. Related services like: *RabbitMQ* or *MySQL* **are neither installed nor configured** by this cookbook.
+Cookbook provides **mistral** resource provider which allows you to deploy mistral service, populate its configuration and start it up. Related services like: *RabbitMQ* or *MySQL* **are neither installed nor configured** by this cookbook.
 
-### mistral_service attributes
+Typical resource invocation may look like this:
+
+```ruby
+mistral 'default' do
+  action [ :create, :start ]
+  options({
+    database: {
+      connection: 'mysql://mistral:changeme@127.0.0.1:3306/mistral'
+    }
+  })
+  starts [:api, :executor, :engine]
+end
+```
+
+In case `db_initialized` is provided, cookbook will try to create database **mistral** as well as the **mistrall** user identified by password *changeme*. However a running instance of mysql should be already in its place prior to the resource invocation. 
+
+The resource code above will bring up system service **mistral**. You can bring up several services by defining the resource multiple times. For names other than *default* the system service will be named as **mistral-myname**.
+
+## Mistral LWRP (mistral)
+
+Cookbook comes with *mistral* resource provider which brings up mistral service or multiple mistral services. Provider uses specified `install_recipe` attribute if it's given to fetch mistral.
+
+After mistral is fetched provider initializes database, creates configuration and service files and as the last step it brings up services.
+
+### mistral resource attributes
 
  * **:bind_address** - Specifies address where mistral **api** server listens by default `0.0.0.0`.
  * **:port** - Specifies port of **api** server by default `8989`.
  * **:run_user** - Runs service as specified user. If it's different from default user should be created manually. *Default*: `mistral`.
  * **:run_group** - Same as the previous for setting the group. *Default*: `mistral`.
- * **:conf_source** - Mistral configuration file template name. *Default*: `mistral.conf.erb`. 
- * **:log_source** - Mistral log file template name. *Default*: `logging.conf.erb`.
- * **:conf_cookbook** and **:log_cookbook** - Set the previous template files cookbook locations.
- * **:options** - Use to specify options which are passed to the *mistral.conf*.
- * **:log_variables** - Use to specify template variables which are passed to the *logging.conf*.
- * **:touch_logfiles** - An array of log file paths which will be use should be passed here. This will create files and set privileges as the service might be run under normal system user.
- * **:starts** - Specify an array of (*:api, :engine, :executor*) to set servers which are started by mistral. If nothing is given mistral starts all three of them.
+* **:options** - Use to specify options which are passed for the *mistral.conf* generation from the template.
+ * **:logfile_source** - Mistral log file template cookbook path. *Default*: `logging.conf.erb`.
+ * **:logfile_cookbook** - Cookbook of logfile template. If not given the one from this cookbook is used.
+ * **:logfile_options** - Use to specify options to be passed for log configuration file template.
+ * **:logfile_creates** - An array of log file paths which will pre-created by cookbook. Can be used when services are run with dropped privileges and don't have access to log directories such as */var/log*.
+ * **:starts** - Specifies an array of [*:api, :engine, :executor*] components to start up by mistral.
 
-### Invocation example
-
-```
-mistral_service 'st2' do
-  action [ :create, :start ]
-  options({
-    DEFAULT: {
-      qpid_hostname: 'broker.example.net'
-    },
-    api: {
-      host: 'mistral-api.host',
-      port: '8989'
-    }
-  })
-  touch_logfiles [
-      '/var/log/mistral.log'
-    ]
-  starts [ :executor, :engine ]
-end
-```
-
-The code above will create runit mistral service called **mistrall-st2** and prepare its log and service configuration.
-
-Without providing valid configuration **mistral won't start**, i.e if you haven't setup mysql or rabbitmq. 
-**bind_address** and **port** will be overwritten if you start an **api** instance (for example if you didn't explicitly set the **starts** attribute).
-
-### openstack-mistral::default
-
-Include `openstack-mistral` in your node's `run_list`:
-
-```json
-{
-  "run_list": [
-    "recipe[openstack-mistral::default]"
-  ]
-}
-```
 
 ## License and Authors
 
