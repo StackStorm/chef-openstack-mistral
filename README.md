@@ -44,7 +44,7 @@ mistral 'default' do
 end
 ```
 
-In case `db_initialized` is provided, cookbook will try to create database **mistral** as well as the **mistrall** user identified by password *changeme*. However a running instance of mysql should be already in its place prior to the resource invocation. 
+In case `db_initialize.enabled` is provided, cookbook will try to create database **mistral** as well as the **mistrall** user identified by password *changeme*. However a running instance of mysql should be already in its place prior to the resource invocation. 
 
 The resource code above will bring up system service **mistral**. You can bring up several services by defining the resource multiple times. For names other than *default* the system service will be named as **mistral-myname**.
 
@@ -60,7 +60,7 @@ After mistral is fetched provider initializes database, creates configuration an
  * **:port** - Specifies port of **api** server by default `8989`.
  * **:run_user** - Runs service as specified user. If it's different from default user should be created manually. *Default*: `mistral`.
  * **:run_group** - Same as the previous for setting the group. *Default*: `mistral`.
-* **:options** - Use to specify options which are passed for the *mistral.conf* generation from the template.
+ * **:options** - Use to specify options which are passed for the *mistral.conf* generation from the template.
  * **:logfile_source** - Mistral log file template cookbook path. *Default*: `logging.conf.erb`.
  * **:logfile_cookbook** - Cookbook of logfile template. If not given the one from this cookbook is used.
  * **:logfile_options** - Use to specify options to be passed for log configuration file template.
