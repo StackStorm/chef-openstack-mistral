@@ -45,6 +45,8 @@ class Chef
 
         template "#{new_resource.name} :create #{config_file_base}.conf" do
           path "#{config_file_base}.conf"
+          source 'mistral.conf.erb'
+          cookbook 'openstack-mistral'
           variables(options: config_options)
           mode '0644'
           action :create
