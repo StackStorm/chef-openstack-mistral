@@ -33,10 +33,8 @@ module MistralCookbook
 
         directory "#{new_resource.name} log file directory: #{file_dir}" do
           path file_dir
-          owner 'root'
-          group 'root'
-          mode '0755'
           action :create
+          # no managing of directory owner, group or mode
         end
 
         file "#{new_resource.name} touch #{path}" do
