@@ -65,6 +65,8 @@ class Chef
 
         service_template(:create) do
           source "#{service_provider}-init.erb"
+          cookbook 'openstack-mistral'
+
           variables({
             service_name: config_basename,
             run_user: new_resource.run_user,
