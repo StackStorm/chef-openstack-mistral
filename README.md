@@ -1,4 +1,7 @@
 # OpenStack Mistral chef cookbook
+
+[cookbook]: https://github.com/StackStorm/chef-openstack-mistral
+
 Sets up and configures [**Mistral Workflow Service**](https://github.com/stackforge/mistral) on a chef node.
 
 ## Supported Platforms
