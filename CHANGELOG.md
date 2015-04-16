@@ -1,3 +1,7 @@
+# 0.2.2
+
+Removed mysql* dependencies, since they are handled by mysql cookbook.
+
 # 0.2.1
 
 Refactored

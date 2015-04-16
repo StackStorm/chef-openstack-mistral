@@ -6,15 +6,11 @@ default['openstack-mistral']['source']['git_action']   = nil
 default['openstack-mistral']['source']['home'] = '/opt/openstack/mistral'
 
 # Source build dependencies
-case node['platform_family']
+default['openstack-mistral']['source']['dependencies'] = case node['platform_family']
 when 'debian'
-  default['openstack-mistral']['source']['dependencies'] = %w(libssl-dev
-      libyaml-dev libffi-dev libxml2-dev libxslt1-dev libmysqlclient-dev
-    )
-when 'rhel', 'fedora'
-  default['openstack-mistral']['source']['dependencies'] = %w(openssl-devel
-      libyaml-devel libffi-devel libxml2-devel libxslt-devel mysql-devel
-    )
+  %w(libssl-dev libyaml-dev libffi-dev libxml2-dev libxslt1-dev)
+when 'fedora', 'rhel'
+  %w(openssl-devel libyaml-devel libffi-devel libxml2-devel libxslt-devel)
 end
 
 # The actual home is set by the install recipe
