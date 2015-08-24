@@ -59,22 +59,22 @@ module MistralCookbook
     # Service provider mapping
     def service_provider
       @service_provider ||= begin
-        klass = Chef::Platform.find_provider(node.platform,
-                                  node.platform_version, :service)
-        svcprovider = klass.name.split('::').last.downcase.to_sym
-        supported = [ :upstart, :debian, :systemd, :redhat ]
-        case node.platform
-        when 'ubuntu'
-          :upstart
+        cookbook_supports = [:upstart, :debian, :systemd, :redhat]
+        platform_supports = Chef::Platform::ServiceHelpers.service_resource_providers
+        avail = cookbook_supports.select { |sv| platform_supports.include? sv }
+
+        if avail.empty?
+            NotImplementedError.new("platform #{node[:platform]} " \
+                                    "#{node[:platform_version]} not supported")
+        end
+
+        case node.platform_family
         when 'debian'
-          :debian
+          avail.include?(:upstart) ? :upstart : :debian
+        when 'rhel', 'fedora'
+          avail.include?(:systemd) ? :systemd : :redhat
         else
-          if supported.include?(svcprovider)
-            svcprovider
-          else
-            NotImplementedError.new("platform #{node[:platform]} " <<
-                        "#{node[:platform_version]} not supported")
-          end
+          avail.first
         end
       end
     end

@@ -4,6 +4,10 @@
 
 Sets up and configures [**Mistral Workflow Service**](https://github.com/stackforge/mistral) on a chef node.
 
+## Compatibility
+
+Use version **<0.2.3** of this cookbook with chef **<12.4.0**.
+
 ## Supported Platforms
 
 There are no restrictions for platforms, cookbook should support major debian, fedora and rhel platforms. Tested to work on *ubuntu*, *debian* and *centos*.
