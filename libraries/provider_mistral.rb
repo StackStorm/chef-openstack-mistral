@@ -5,6 +5,7 @@ require_relative 'helpers'
 class Chef
   class Provider
     class Mistral < Chef::Provider::LWRPBase
+      provides :mistral
 
       include MistralCookbook::Helpers
 

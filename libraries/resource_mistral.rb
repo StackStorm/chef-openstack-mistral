@@ -10,7 +10,7 @@ class Chef
 
       attribute :service_name, kind_of: String, name_attribute: true
       attribute :bind_address, kind_of: String, default: '0.0.0.0'
-      attribute :port, kind_of: String, default: 8989
+      attribute :port, kind_of: Integer, default: 8989
       attribute :run_group, kind_of: String, default: 'mistral'
       attribute :run_user, kind_of: String, default:  'mistral'
       attribute :options, kind_of: [ Hash ], default: nil

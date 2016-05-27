@@ -100,7 +100,6 @@ module MistralCookbook
     end
 
     def db_initialize
-      db_drivers_install
       if !db_opts['enabled']
         return
       elsif !db_uri
@@ -170,19 +169,6 @@ module MistralCookbook
 
     def db_init_method
       :"db_initialize_#{db_uri.scheme}"
-    end
-
-    # Install python database drivers
-    def db_drivers_install
-      include_recipe('python::pip')
-      case db_uri.scheme
-      when 'mysql'
-        python_pip "#{new_resource.name} :install mysql-python" do
-          package_name 'mysql-python'
-          virtualenv "#{home}/.venv"
-          action :install
-        end
-      end
     end
 
     def home
