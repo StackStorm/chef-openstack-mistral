@@ -8,7 +8,7 @@ Sets up and configures [**Mistral Workflow Service**](https://github.com/stackfo
 
 Use version **<0.2.3** of this cookbook with chef **<12.4.0**.
 
-As of version **0.3.0**, Mistal will be installed using Stackstorm's Packagecloud packages.
+As of version **0.3.0**, Mistral will be installed using Stackstorm's Packagecloud packages.
 
 ## Supported Platforms
 
@@ -22,7 +22,6 @@ Cookbook depends on other cookbooks: ***build-essential, python, git, mysql***.
 
 | Key | Type | Description | Default |
 | --- | :---: | :--- | :---: |
-| `['openstack-mistral']['repo]['home']` | String | Specifies directory where Package installation method will place mistral. | `'/opt/openstack/mistral'` |
 | `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral configrution files are placed. | `'/opt/openstack/etc'` |
 | `['openstack-mistral']['logfiles_mode']` | String | Sets log file permission for resource `logfile_creates` option. | `'0644'` |
 | `['openstack-mistral']['db_initialize']['enabled']` | Boolean | If enabled, cookbook will try to create database for mistral. | `false` |

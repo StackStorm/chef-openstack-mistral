@@ -1,8 +1,19 @@
-default['openstack-mistral']['repo']['home'] = '/opt/stackstorm/mistral'
-
-# The actual home is set by the install recipe
+# The home is set to null by package
 default['openstack-mistral']['home'] = nil
-default['openstack-mistral']['etc_dir'] = '/opt/stackstorm/mistral/etc'
+default['openstack-mistral']['etc_dir'] = '/etc/mistral'
+
+default['openstack-mistral']['db_initialize']['enabled'] = false
+default['openstack-mistral']['db_initialize']['superuser'] = 'root'
+default['openstack-mistral']['db_initialize']['password'] = 'ilikerandompasswords'
+default['openstack-mistral']['db_initialize']['allowed_hosts'] = 'localhost'
+
+# rabbitmq
+default['openstack-mistral']['db_initialize']['enabled'] = false
+default['openstack-mistral']['db_initialize']['superuser'] = 'root'
+default['openstack-mistral']['db_initialize']['password'] = 'ilikerandompasswords'
+default['openstack-mistral']['db_initialize']['allowed_hosts'] = 'localhost'
+
+# mongodb
 default['openstack-mistral']['db_initialize']['enabled'] = false
 default['openstack-mistral']['db_initialize']['superuser'] = 'root'
 default['openstack-mistral']['db_initialize']['password'] = 'ilikerandompasswords'
