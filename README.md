@@ -8,6 +8,8 @@ Sets up and configures [**Mistral Workflow Service**](https://github.com/stackfo
 
 Use version **<0.2.3** of this cookbook with chef **<12.4.0**.
 
+As of version **0.3.0**, Mistal will be installed using Stackstorm's Packagecloud packages.
+
 ## Supported Platforms
 
 There are no restrictions for platforms, cookbook should support major debian, fedora and rhel platforms. Tested to work on *ubuntu*, *debian* and *centos*.
@@ -20,11 +22,7 @@ Cookbook depends on other cookbooks: ***build-essential, python, git, mysql***.
 
 | Key | Type | Description | Default |
 | --- | :---: | :--- | :---: |
-| `['openstack-mistral']['install_recipe']` | String | Mistral recipe used to fetch mistral. Default option will fetch mistral from git repository. | `'openstack-mistral::install_source'` |
-| `[‘openstack-mistral’][‘source’][‘git_url’] ` | String | Git source url. (https://github.com/stackforge/mistral)  |
-| `['openstack-mistral']['source']['git_revision']` | String | Git branch or revision. If none is given the latest is used. | `nil` |
-| `['openstack-mistral']['source']['git_action']` | String | Action for git provider. If none is given the source will be checked out. | `nil` |
-| `['openstack-mistral']['source']['home']` | String | Specifies directory where source installation method will place mistral. | `'/opt/openstack/mistral'` |
+| `['openstack-mistral']['repo]['home']` | String | Specifies directory where Package installation method will place mistral. | `'/opt/openstack/mistral'` |
 | `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral configrution files are placed. | `'/opt/openstack/etc'` |
 | `['openstack-mistral']['logfiles_mode']` | String | Sets log file permission for resource `logfile_creates` option. | `'0644'` |
 | `['openstack-mistral']['db_initialize']['enabled']` | Boolean | If enabled, cookbook will try to create database for mistral. | `false` |
