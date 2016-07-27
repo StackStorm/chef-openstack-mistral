@@ -9,6 +9,10 @@ driver:
 provisioner:
   name: chef_zero
 
+verifier:
+  name: inspec
+  format: documentation
+
 platforms:
   - name: ubuntu-14.04
   - name: centos-7.0
@@ -19,4 +23,8 @@ suites:
   - name: default
     run_list:
       - "recipe[openstack-mistral::default]"
+    attributes:
+  - name: database
+    run_list:
+      - "recipe[openstack-mistral::_database]"
     attributes:

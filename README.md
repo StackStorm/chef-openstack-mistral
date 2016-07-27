@@ -2,7 +2,7 @@
 
 [cookbook]: https://github.com/StackStorm/chef-openstack-mistral
 
-Sets up and configures [**Mistral Workflow Service**](https://github.com/stackforge/mistral) on a chef node.
+Sets up and configures [**Mistral Workflow Service**](https://github.com/openstack/mistral) on a Chef node.
 
 ## Compatibility
 
@@ -16,61 +16,44 @@ There are no restrictions for platforms, cookbook should support major debian, f
 
 ## Cookbook dependencies
 
-Cookbook depends on other cookbooks: ***build-essential, python, git, mysql***.
+Cookbook depends on other cookbooks: ***apt, packagecloud, database, postgresql***.
 
 ## Attributes
 
 | Key | Type | Description | Default |
 | --- | :---: | :--- | :---: |
-| `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral configrution files are placed. | `'/opt/openstack/etc'` |
-| `['openstack-mistral']['logfiles_mode']` | String | Sets log file permission for resource `logfile_creates` option. | `'0644'` |
+| `['openstack-mistral']['etc_dir']` | String | Specifies the configuration directory where mistral configuration files are placed. | `'/opt/openstack/etc'` |
 | `['openstack-mistral']['db_initialize']['enabled']` | Boolean | If enabled, cookbook will try to create database for mistral. | `false` |
-| `['openstack-mistral']['db_initialize']['superuser']` | String | Database user which can create databases and setup permissions. | `'root'` |
-| `['openstack-mistral']['db_initialize']['password']` | String | Password of superuser. | `'ilikerandompasswords'` |
+| `['openstack-mistral']['db_initialize']['upgrade]` | Boolean | If enabled, cookbook will try to upgrade database for mistral once. | `false` |
+| `['openstack-mistral']['db_initialize']['populate]` | Boolean | If enabled, cookbook will try to populate database for mistral once. | `false` |
+| `['openstack-mistral']['db_initialize']['db_name]` | String | Database name. | `'mistral` |
+| `['openstack-mistral']['db_initialize']['db_username]` | String | Database user which own `db_name` database . | `'mistral` |
+| `['openstack-mistral']['db_initialize']['db_superuser]` | String | User which create role and databases. | `'postgres` |
+| `['postgres]['db_initialize']['db_superuser_password]` | String | Superuser password. | `'ilikerandompasswords'` |
 | `['openstack-mistral']['db_initialize']['allowed_hosts']` | String | Hosts which will be allowed to access mistral database. | `'localhost'` |
-
+| `['openstack-mistral']['config']` | Hash | Configurations to be overwritten in `mistral.conf`. | `{}` |
 
 ## Usage
 
-Cookbook provides **mistral** resource provider which allows you to deploy mistral service, populate its configuration and start it up. Related services like: *RabbitMQ* or *MySQL* **are neither installed nor configured** by this cookbook.
+Cookbook install `st2mistral` package, overwrite its configuration with `node['openstack-mistral']['config']` attributes and start it up. `st2mistral` package also install a default ***mistral*** user and setup logging. Related services like: *RabbitMQ* **are neither installed nor configured** by this cookbook.
 
-Typical resource invocation may look like this:
+Include this cookbook from other cookbooks or directly from runlist:
 
 ```ruby
-mistral 'default' do
-  action [ :create, :start ]
-  options({
-    database: {
-      connection: 'mysql://mistral:changeme@127.0.0.1:3306/mistral'
-    }
-  })
-  starts [:api, :executor, :engine]
-end
+include_recipe 'openstack-mistral::default'
 ```
 
-In case `db_initialize.enabled` is provided, cookbook will try to create database **mistral** as well as the **mistrall** user identified by password *changeme*. However a running instance of mysql should be already in its place prior to the resource invocation. 
+In case `db_initialize.enabled` is provided, `_database.rb` recipe will try to install `postgresql`, create user `mistral` and create database **mistral**. Default this is set to `false`.
 
-The resource code above will bring up system service **mistral**. You can bring up several services by defining the resource multiple times. For names other than *default* the system service will be named as **mistral-myname**.
+```ruby
+include_recipe 'openstack-mistral::_database'
+```
 
-## Mistral LWRP (mistral)
+Initial schema upgrade and populate of database can also be done once if ***upgrade*** or ***populate** are set.
 
-Cookbook comes with *mistral* resource provider which brings up mistral service or multiple mistral services. Provider uses specified `install_recipe` attribute if it's given to fetch mistral.
+## Development
 
-After mistral is fetched provider initializes database, creates configuration and service files and as the last step it brings up services.
-
-### mistral resource attributes
-
- * **:bind_address** - Specifies address where mistral **api** server listens by default `0.0.0.0`.
- * **:port** - Specifies port of **api** server by default `8989`.
- * **:run_user** - Runs service as specified user. If it's different from default user should be created manually. *Default*: `mistral`.
- * **:run_group** - Same as the previous for setting the group. *Default*: `mistral`.
- * **:options** - Use to specify options which are passed for the *mistral.conf* generation from the template.
- * **:logfile_source** - Mistral log file template cookbook path. *Default*: `logging.conf.erb`.
- * **:logfile_cookbook** - Cookbook of logfile template. If not given the one from this cookbook is used.
- * **:logfile_options** - Use to specify options to be passed for log configuration file template.
- * **:logfile_creates** - An array of log file paths which will pre-created by cookbook. Can be used when services are run with dropped privileges and don't have access to log directories such as */var/log*.
- * **:starts** - Specifies an array of [*:api, :engine, :executor*] components to start up by mistral.
-
+Setup development environment using [ChefDK](https://downloads.chef.io/chef-dk/). This is to ensure development and testing infrastructure (TravisCI) are using the same Ruby and libraries.
 
 ## License and Authors
 
@@ -78,3 +61,7 @@ License:: Apache 2.0
 
 - Author:: StackStorm (<info@stackstorm.com>)
 - Author:: Denis Baryshev (<dennybaa@gmail.com>)
+
+## Contributors
+
+- Author:: Bao Nguyen (<ngqbao@gmail.com>)
