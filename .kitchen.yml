@@ -7,7 +7,11 @@ driver:
   # use_sudo: false
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
+
+verifier:
+  name: inspec
+  format: documentation
 
 platforms:
   - name: ubuntu-14.04
@@ -19,4 +23,8 @@ suites:
   - name: default
     run_list:
       - "recipe[openstack-mistral::default]"
+    attributes:
+  - name: database
+    run_list:
+      - "recipe[openstack-mistral::_database]"
     attributes:
