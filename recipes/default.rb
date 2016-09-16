@@ -48,7 +48,7 @@ template '/etc/mistral/mistral.conf' do
   )
   mode '0644'
   action :create
-  notifies :reload, 'service[mistral]', :delayed
-  notifies :reload, 'service[mistral-api]', :delayed
-  notifies :reload, 'service[mistral-server]', :delayed
+  notifies :restart, 'service[mistral]', :delayed
+  notifies :restart, 'service[mistral-api]', :delayed
+  notifies :restart, 'service[mistral-server]', :delayed
 end
