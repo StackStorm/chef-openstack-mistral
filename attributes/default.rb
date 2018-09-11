@@ -18,6 +18,7 @@ default['openstack-mistral']['db_initialize']['port'] = 5432
 # Per postgresql [cookbook](https://github.com/hw-cookbooks/postgresql),
 # if this is not set, random password (using openssl) is setup
 default['postgresql']['password']['postgres'] = 'ilikerandompasswords'
+default['postgresql']['pg_gem']['version'] = '0.21.0'
 
 default['openstack-mistral']['config'] = {
   default: {
