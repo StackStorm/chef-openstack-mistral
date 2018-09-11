@@ -6,7 +6,6 @@ services: docker
 env:
   matrix:
   - INSTANCE=postgresql-ubuntu-1404
-  - INSTANCE=postgresql-ubuntu-1204
   - INSTANCE=postgresql-centos-6
   - INSTANCE=postgresql-centos-7
 

@@ -11,6 +11,9 @@ AllCops:
     - example/**
     - test/**
     - vendor/**
+    - Vagrantfile
+    - Berksfile
+    - Thorfile
 
 Encoding:
   Enabled: false
