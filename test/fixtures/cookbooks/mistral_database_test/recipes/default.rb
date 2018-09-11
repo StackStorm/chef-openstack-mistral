@@ -1,3 +1,4 @@
+node.override['postgresql']['pg_gem']['version'] = '0.21.0'
 include_recipe 'postgresql::server'
 include_recipe 'postgresql::ruby'
 
