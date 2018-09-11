@@ -6,7 +6,7 @@ group :integration do
   cookbook 'yum'
   cookbook 'apt'
   cookbook 'selinux'
-  cookbook 'postgresql'
+  cookbook 'postgresql', '= 6.1.1'
 end
 
 cookbook 'mistral_database_test', path: 'test/fixtures/cookbooks/mistral_database_test'

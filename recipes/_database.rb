@@ -4,6 +4,7 @@ include_recipe 'openstack-mistral::default'
 return unless node['openstack-mistral']['db_initialize']['enabled']
 
 node.override['postgresql']['password']['postgres'] = node['openstack-mistral']['db_initialize']['db_password']
+node.override['postgresql']['pg_gem']['version'] = '0.21.0'
 include_recipe 'database::postgresql'
 include_recipe 'postgresql::server'
 
