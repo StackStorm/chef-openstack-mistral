@@ -9,6 +9,10 @@ env:
   - INSTANCE=postgresql-centos-6
   - INSTANCE=postgresql-centos-7
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y postgresql libpq-dev
+
 # Don't `bundle install`
 install: echo "skip bundle install"
 
