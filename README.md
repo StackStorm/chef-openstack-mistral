@@ -1,3 +1,7 @@
+> **DEPRECATED!**  
+> `Mistral` is deprecated since StackStorm`v3.3.0` in favor of [Orquesta](https://docs.stackstorm.com/orquesta/index.html), a self-grown StackStorm workflow Engine.
+
+
 # OpenStack Mistral chef cookbook
 
 [cookbook]: https://github.com/StackStorm/chef-openstack-mistral
